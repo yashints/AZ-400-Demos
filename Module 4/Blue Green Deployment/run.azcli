@@ -1,0 +1,32 @@
+RGNAME="bluegreenrg"
+LOCATION="australiaeast"
+SUBID="98a0e50f-04b4-4181-baa6-3cb5dbbdb4b5"
+REPONAME="BlueGreen"
+
+gh auth login --hostname github.com
+
+gh repo create $REPONAME --private --confirm
+
+az group create -n $RGNAME -l $LOCATION
+
+az ad sp create-for-rbac --name api://githubactionsp --role owner --scopes /subscriptions/$SUBID/resourceGroups/$RGNAME --sdk-auth
+
+git init
+
+git add .
+
+git commit -m "Adding files to be pushed to GitHub"
+
+git branch -m main
+
+git remote add origin "https://github.com/yashints/$REPONAME.git"
+
+git push -u origin main
+
+ACRLoginServer=$(az acr list -g $RGNAME --query [0].loginServer -o tsv)
+ACRName=$(az acr list -g $RGNAME --query [0].name -o tsv)
+ACRPassword=$(az acr credential show -n $ACRName --query passwords[0].value -o tsv)
+
+gh secret set REGISTRY_LOGIN_SERVER --body $ACRLoginServer --repo "https://github.com/yashints/$REPONAME"
+gh secret set REGISTRY_USERNAME --body $ACRName --repo "https://github.com/yashints/$REPONAME"
+gh secret set REGISTRY_PASSWORD --body $ACRPassword --repo "https://github.com/yashints/$REPONAME"
