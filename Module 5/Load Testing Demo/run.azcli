@@ -1,0 +1,29 @@
+RGNAME="loadtesting"
+SUBID="98a0e50f-04b4-4181-baa6-3cb5dbbdb4b5"
+REPONAME="nodejs-appsvc-cosmosdb-bottleneck"
+AZSPNAME="my-load-test-cicd"
+LOADTESTNAME="galoadtestdemo"
+WEBAPPNAME="mywaloadtest400"
+LOCATION="australiaeast"
+
+gh auth login --hostname github.com
+
+gh repo fork https://github.com/yashints/$REPONAME --clone=true
+
+SP=$(az ad sp create-for-rbac --name "api://$AZSPNAME" --role contributor \
+  --scopes /subscriptions/$SUBID --sdk-auth -o tsv)
+
+gh secret set AZURE_CREDENTIALS --body "$SP" --repo "https://github.com/yashints/$REPONAME"
+
+SPID=$(az ad sp show --id api://$AZSPNAME --query appId -o tsv)
+
+az role assignment create --assignee $SPID \
+    --role "Load Test Contributor" \
+    --scope /subscriptions/$SUBID/resourceGroups/$RGNAME \
+    --subscription "$SUBID"
+
+gh secret set AZURE_CREDENTIALS --body "$SP" --repo "https://github.com/yashints/$REPONAME"
+gh secret set AZURE_WEBAPP_NAME --body $WEBAPPNAME --repo "https://github.com/yashints/$REPONAME"
+gh secret set LOAD_TEST_RESOURCE --body $LOADTESTNAME --repo "https://github.com/yashints/$REPONAME"
+gh secret set LOAD_TEST_RESOURCE_GROUP --body $RGNAME --repo "https://github.com/yashints/$REPONAME"
+gh secret set LOCATION --body $LOCATION --repo "https://github.com/yashints/$REPONAME"
