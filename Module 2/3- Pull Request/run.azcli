@@ -1,0 +1,23 @@
+REPONAME="az400"
+BRANCHNAME="feature/simplectrl"
+
+gh auth login --hostname github.com
+
+git clone "https://github.com/yashints/$REPONAME.git"
+
+cd aspnetcoreapp
+
+dotnet tool install --global dotnet-aspnet-codegenerator
+
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
+
+dotnet aspnet-codegenerator --project . controller -name SimpleController
+
+git add .
+
+git commit -m "Added a new controller"
+
+git push origin $BRANCHNAME
+
+gh pr create --title "Added simple controller"  --base main --head $BRANCHNAME
+

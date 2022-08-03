@@ -1,0 +1,18 @@
+
+cd "../1- Git Demo/aspnetcoreapp"
+
+git checkout -b feature/myFeature
+
+git branch
+
+code program.cs
+
+# refer to the readme for the next action
+
+git status
+
+git add .
+
+git commit -m "Added console logging"
+
+git push -u origin feature/myFeature
