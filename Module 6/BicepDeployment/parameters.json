@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionId": {
+      "value": "98a0e50f-04b4-4181-baa6-3cb5dbbdb4b5"
+    },
+    "kvResourceGroup": {
+      "value": "bicepdemo"
+    },
+    "kvName": {
+      "value": "bicepkv400"
+    }
+  }
+}

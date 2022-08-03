@@ -1,0 +1,22 @@
+RGNAME="AZ400"
+LOCATION="australiaeast"
+DEPLOYSTORAGE="armstg25116"
+CONTAINERNAME="armtemplates"
+
+az group create --name $RGNAME --location $LOCATION
+
+az storage account create -g $RGNAME -n $DEPLOYSTORAGE -l $LOCATION --sku Standard_LRS
+
+az storage container create -n $CONTAINERNAME --account-name $DEPLOYSTORAGE
+
+az storage blob upload \
+  -f azuredeploy.json \
+  -c $CONTAINERNAME \
+  -n azuredeploy.json \
+  --account-name $DEPLOYSTORAGE
+
+az storage blob upload \
+  -f linkedStorageAccount.json \
+  -c $CONTAINERNAME \
+  -n linkedStorageAccount.json \
+  --account-name $DEPLOYSTORAGE

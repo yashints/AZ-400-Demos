@@ -1,0 +1,21 @@
+RGNAME="AZ400"
+LOCATION="australiaeast"
+DEPLOYSTORAGE="armstg25116"
+CONTAINERNAME="armtemplates"
+
+KEY=$(az storage account keys list -g $RGNAME -n $DEPLOYSTORAGE --query "[0].value" -o tsv)
+ENDPOINT=$(az storage account show -g $RGNAME -n $DEPLOYSTORAGE --query "primaryEndpoints.blob" -o tsv)
+
+MAINTEMPLATEURI="$ENDPOINT$CONTAINERNAME/azuredeploy.json"
+END=`date -u -d "30 minutes" '+%Y-%m-%dT%H:%MZ'`
+SAS=$(az storage container generate-sas \
+  -n $CONTAINERNAME --permissions r \
+  --account-name $DEPLOYSTORAGE \
+  --account-key $KEY \
+  --expiry $END \
+  --https-only -o tsv)
+
+az deployment group create --resource-group $RGNAME \
+  --template-uri $MAINTEMPLATEURI \
+  --query-string $SAS \
+  --parameters projectName="armdemo"

@@ -1,0 +1,45 @@
+IDENTITY="myUserIdentity"
+RGNAME="az400"
+LOCATION="eastus"
+AUTOMATIONACC="myAutomationAcc"
+VNET="myVNET"
+SUBNETNAME="vmsubnet"
+
+az group create -n $RGNAME -l $LOCATION
+
+az identity create -n $IDENTITY -g $RGNAME
+
+IDENTITYID=$(az identity show -n $IDENTITY -g $RGNAME --query clientId -o tsv)
+
+az automation account create \
+  --automation-account-name $AUTOMATIONACC \
+  --resource-group $RGNAME \
+  --location $LOCATION \
+  --sku Basic
+
+az network vnet create -n $VNET -l $LOCATION -g $RGNAME
+
+az network vnet subnet create --vnet-name $VNET \
+  -g $RGNAME -n $SUBNETNAME \
+  --address-prefixes 10.0.1.0/24
+
+az vm create -g $RGNAME \
+  --vnet-name $VNET --subnet-name $SUBNETNAME \
+  --size Standard_D2s_v3 \
+  -n vm1 --image Win2019Datacenter \
+  --admin-password $(openssl rand -base64 20)
+
+VM1ID=$(az vm show -n vm1 -g $RGNAME --query id)
+
+az vm create -g $RGNAME \
+  --vnet-name $VNET --subnet $SUBNETNAME \
+  --size Standard_D2s_v3 \
+  -n vm2 --image Win2019Datacenter \
+  --admin-password $(openssl rand -base64 20)
+
+VM2ID=$(az vm show -n vm1 -g $RGNAME --query id)
+
+az provider register --namespace 'Microsoft.'
+
+az role assignment create --assignee "$IDENTITYID" --role "DevTest Labs User" --scope "$VM1ID"
+az role assignment create --assignee $IDENTITYID --role "DevTest Labs User" --scope $VM2ID
