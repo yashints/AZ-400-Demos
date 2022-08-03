@@ -1,0 +1,18 @@
+$RGNAME="appinsightrg"
+$LOCATION="eastus"
+
+az group create -n $RGNAME -l $LOCATION
+
+$KEY=$(az monitor app-insights component create `
+  --resource-group $RGNAME `
+  --app myappinsights --kind web `
+  --location $LOCATION `
+  --application-type web `
+  --query connectionString)
+
+dotnet new mvc -n ApplicationInsightsDemo
+
+cd ApplicationInsightsDemo
+
+dotnet add package Microsoft.ApplicationInsights.AspNetCore
+
