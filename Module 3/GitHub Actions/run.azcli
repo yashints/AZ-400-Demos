@@ -1,0 +1,21 @@
+REPONAME="GitHubActionDemo"
+
+git init
+
+curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/VisualStudio.gitignore
+
+git add .
+
+git status
+
+git commit -m "My initial commit"
+
+git branch -m main
+
+gh auth login --hostname github.com
+
+gh repo create $REPONAME --private --confirm
+
+git remote add origin "https://github.com/yashints/$REPONAME.git"
+
+git push -u origin main

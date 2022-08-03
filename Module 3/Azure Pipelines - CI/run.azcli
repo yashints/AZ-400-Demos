@@ -1,0 +1,19 @@
+GITHUBORG="yashints"
+DEVOPSORG="https://dev.azure.com/yashintstest/"
+PROJECTNAME="PipelineDemo"
+
+gh auth login --hostname github.com
+
+gh repo fork https://github.com/MicrosoftDocs/pipelines-dotnet-core --clone=false
+
+az login
+
+az devops project create \
+  --name $PROJECTNAME \
+  --org $DEVOPSORG \
+  --visibility public
+
+
+
+
+

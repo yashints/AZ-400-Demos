@@ -1,0 +1,31 @@
+GITHUBORG="yashints"
+DEVOPSORG="https://dev.azure.com/yashintstest/"
+PROJECTNAME="PipelineCDDemo"
+RGNAME="azpipelinecddemo"
+
+gh auth login --hostname github.com
+
+gh repo fork https://github.com/MicrosoftDocs/pipelines-javascript-docker --clone=false
+
+az login
+
+az devops project create \
+  --name $PROJECTNAME \
+  --org $DEVOPSORG \
+  --visibility public
+
+# Create a resource group
+az group create --name $RGNAME --location eastus
+
+# Create a container registry
+az acr create --resource-group $RGNAME --name azpipelinecddemo --sku Basic
+
+# Create app service plan
+
+az appservice plan create --resource-group $RGNAME --name ASPLinux --sku S1 --is-linux
+
+# Create web app
+
+az webapp create --resource-group $RGNAME \
+  --plan ASPLinux --name azpipelinecddemowa \
+  --deployment-container-image-name mcr.microsoft.com/dotnet/samples:dotnetapp
