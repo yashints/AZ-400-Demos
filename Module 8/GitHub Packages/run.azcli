@@ -1,0 +1,25 @@
+$REPONAME="ghpackagesdemo"
+
+gh auth login --hostname github.com
+
+gh repo create $REPONAME --private --clone
+
+cd $REPONAME
+
+npm init
+
+copy ../index.js .
+
+mkdir .github/workflows
+
+copy ../release-package.yml .github/workflows
+
+npm install
+
+git add index.js package.json package-lock.json .github/workflows/release-package.yml
+
+git commit -m "initialize npm package"
+
+git branch -m main
+
+git push -u origin main

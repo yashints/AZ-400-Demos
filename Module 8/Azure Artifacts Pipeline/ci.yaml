@@ -1,0 +1,28 @@
+trigger:
+- main
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:      
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration) /p:SourceRevisionId=$(Build.SourceVersion)'
+
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet pack"
+      inputs:
+        command: 'pack'
+        arguments: '--configuration $(buildConfiguration)'
+        packagesToPack: 'calculator.csproj'
+
+    - task: NuGetAuthenticate@0
+      displayName: 'NuGet Authenticate'
+    - task: NuGetCommand@2
+      displayName: 'NuGet push'
+      inputs:
+        command: push
+        publishVstsFeed: '<projectName>/<feedName>'
+        allowPackageConflicts: true

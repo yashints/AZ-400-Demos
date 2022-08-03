@@ -1,0 +1,41 @@
+PROJECTNAME="pipelinecddemo"
+DEVOPSORG="https://dev.azure.com/yas-hints/"
+REPONAME="calculator"
+ORGUSER="yas-hints"
+PAT="<Replace with your own PAT>"
+
+dotnet new classlib --name calculator
+
+cd calculator
+
+rm Class1.cs
+
+cp ../Calculator.cs .
+cp ../ci.yaml .
+cp ../.gitignore .
+
+export AZURE_DEVOPS_EXT_PAT=$PAT
+
+az devops project create \
+  --name $PROJECTNAME \
+  --org $DEVOPSORG \
+  --visibility public
+
+az repos create --name $REPONAME \
+  --project $PROJECTNAME \
+  --org $DEVOPSORG
+
+git init
+
+git add .
+
+git commit -m "Adding files to git"
+
+git branch -m main
+
+git remote remove origin
+
+git remote add origin https://$ORGUSER@dev.azure.com/$ORGUSER/$PROJECTNAME/_git/$REPONAME
+
+B64_PAT=$(printf "%s"":$PAT" | base64)
+git -c http.extraHeader="Authorization: Basic ${B64_PAT}" push -u origin --all

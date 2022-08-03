@@ -1,0 +1,7 @@
+dotnet new classlib --name AZ400
+
+cd AZ400
+
+dotnet pack --output nupkgs
+
+../nuget.exe push -Source "yas-hints" -ApiKey az nupkgs/AZ400.1.0.0.nupkg
