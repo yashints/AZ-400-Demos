@@ -1,8 +1,8 @@
-PROJECTNAME="pipelinecddemo"
-DEVOPSORG="https://dev.azure.com/yas-hints/"
+PROJECTNAME="Feed"
+DEVOPSORG="https://dev.azure.com/az400april23/"
 REPONAME="calculator"
-ORGUSER="yas-hints"
-PAT="<Replace with your own PAT>"
+ORGUSER="az400april23"
+PAT="v5fmllkiet76lguy2fokgaoss26eaukactzzvjkod7obuhprwrdq"
 
 dotnet new classlib --name calculator
 

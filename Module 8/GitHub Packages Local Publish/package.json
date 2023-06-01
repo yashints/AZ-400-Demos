@@ -1,0 +1,14 @@
+{
+  "name": "@yashintsorg/npm-ghp-demo",
+  "version": "1.0.0",
+  "description": "Local publishing to GitHub packages demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 0"
+  },
+  "author": "Yas",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

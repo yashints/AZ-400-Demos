@@ -1,12 +1,14 @@
-$REPONAME="ghpackagesdemo"
+$REPONAME="ghpkg$(Get-Random)"
+$USER="yashints"
+$GHR="$USER/$REPONAME"
 
 gh auth login --hostname github.com
 
-gh repo create $REPONAME --private --clone
+gh repo create $GHR --public --confirm
 
 cd $REPONAME
 
-npm init
+npm init --scope=$USER --yes
 
 copy ../index.js .
 

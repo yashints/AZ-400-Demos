@@ -1,0 +1,5 @@
+npm init
+
+npm login --scope=@yashintsorg --registry=https://npm.pkg.github.com
+
+npm publish

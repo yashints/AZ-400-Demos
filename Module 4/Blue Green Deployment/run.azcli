@@ -1,6 +1,6 @@
 RGNAME="bluegreenrg"
 LOCATION="australiaeast"
-SUBID="98a0e50f-04b4-4181-baa6-3cb5dbbdb4b5"
+SUBID="349202f9-9921-4db9-97d0-2c764fec3bcd"
 REPONAME="BlueGreen"
 
 gh auth login --hostname github.com
