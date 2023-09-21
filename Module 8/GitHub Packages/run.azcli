@@ -1,10 +1,10 @@
 $REPONAME="ghpkg$(Get-Random)"
-$USER="yashints"
+$USER="yashintsorg"
 $GHR="$USER/$REPONAME"
 
 gh auth login --hostname github.com
 
-gh repo create $GHR --public --confirm
+gh repo create $GHR --public --clone
 
 cd $REPONAME
 
@@ -21,7 +21,5 @@ npm install
 git add index.js package.json package-lock.json .github/workflows/release-package.yml
 
 git commit -m "initialize npm package"
-
-git branch -m main
 
 git push -u origin main

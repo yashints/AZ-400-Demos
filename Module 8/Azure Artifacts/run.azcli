@@ -1,7 +1,10 @@
-dotnet new classlib --name AZ400
+dotnet new classlib --name Calculator
 
-cd AZ400
+cd Calculator
+
+cp ../Calculator.cs .
+rm ./Class1.cs
 
 dotnet pack --output nupkgs
 
-../nuget.exe push -Source "AZ400" -ApiKey az nupkgs/AZ400.1.0.0.nupkg
+../nuget.exe push -Source "universal" -ApiKey az nupkgs/Calculator.1.0.0.nupkg
